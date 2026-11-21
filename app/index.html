@@ -1,23 +1,99 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
-<link rel="stylesheet" href="./style.css">
+<title>Vice Key Art Studio — GTA 6 Cover Art Maker</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
+<header id="topbar">
+  <div class="brand">
+    <span class="brand-mark">VK</span>
+    <div>
+      <h1>Vice Key Art Studio</h1>
+      <p>Turn a photo into Leonida key art</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button id="undoBtn" type="button" title="Undo">↩ Undo</button>
+    <button id="redoBtn" type="button" title="Redo">↪ Redo</button>
+    <button id="exportBtnTop" type="button" class="primary">Export PNG</button>
+  </div>
+</header>
+
+<main id="editor">
+  <aside id="panel">
+    <nav id="steps">
+      <button type="button" data-step="0" class="active">1 · Photos</button>
+      <button type="button" data-step="1">2 · Layout</button>
+      <button type="button" data-step="2">3 · Grade</button>
+      <button type="button" data-step="3">4 · Poster</button>
+    </nav>
+
+    <section class="step-page" data-page="0">
+      <h2>Photos</h2>
+      <p class="hint">Six Leonida samples are built in. Add your own — files are read locally, nothing is uploaded.</p>
+      <label class="upload-btn">
+        + Upload photos
+        <input id="fileInput" type="file" accept="image/*" multiple hidden>
+      </label>
+      <div id="photoList" class="photo-list"></div>
+      <h3>Selected photo crop</h3>
+      <label class="slider">Shift X <input id="oxRange" type="range" min="-0.3" max="0.3" step="0.01" value="0"></label>
+      <label class="slider">Shift Y <input id="oyRange" type="range" min="-0.3" max="0.3" step="0.01" value="0"></label>
+      <label class="slider">Zoom <input id="zoomRange" type="range" min="1" max="2.2" step="0.02" value="1"></label>
+      <button id="refocusBtn" type="button">◎ Re-run face-aware crop</button>
+      <h3>Panel assignment</h3>
+      <p class="hint">Click a photo, then click a panel slot to place it there.</p>
+      <div id="slotList" class="slot-list"></div>
+    </section>
+
+    <section class="step-page" data-page="1" hidden>
+      <h2>Layout</h2>
+      <p class="hint">Thirteen key-art compositions, from the classic 7-panel wide to a full-bleed hero.</p>
+      <div id="layoutList" class="card-list"></div>
+    </section>
+
+    <section class="step-page" data-page="2" hidden>
+      <h2>Color grade</h2>
+      <p class="hint">Nine cinematic gradient-map grades, finished with print texture.</p>
+      <div id="gradeList" class="card-list"></div>
+      <h3>Finishing</h3>
+      <label class="slider">Halftone <input id="halftoneRange" type="range" min="0" max="1" step="0.05" value="0.7"></label>
+      <label class="slider">Grain <input id="grainRange" type="range" min="0" max="1" step="0.05" value="0.8"></label>
+      <label class="slider">Vignette <input id="vignetteRange" type="range" min="0" max="1" step="0.05" value="0.9"></label>
+    </section>
+
+    <section class="step-page" data-page="3" hidden>
+      <h2>Poster</h2>
+      <label class="field">Title (chrome)
+        <input id="titleInput" type="text" maxlength="26" value="VICE HEAT">
+      </label>
+      <label class="field">Subtitle (neon script)
+        <input id="subtitleInput" type="text" maxlength="40" value="Leonida Nights">
+      </label>
+      <label class="check"><input id="dressingCheck" type="checkbox" checked>
+        Press strip, billing block, gold seal &amp; barcode</label>
+      <h3>Export</h3>
+      <div class="export-grid">
+        <button type="button" data-export="1080x1080">Square · 1080×1080</button>
+        <button type="button" data-export="1080x1350">Portrait · 1080×1350</button>
+        <button type="button" data-export="1920x1080">Wide · 1920×1080</button>
+        <button type="button" data-export="all" class="primary">Export all three</button>
+      </div>
+      <p class="hint">Exports render offscreen at full resolution with the same deterministic pipeline as the preview.</p>
+    </section>
+  </aside>
+
+  <section id="stage">
+    <canvas id="preview" width="960" height="960"></canvas>
+    <p id="stageCaption">Live preview · Key Art Wide · Vice Sunset</p>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
 </main>
-<script type="module" src="./src/main.js"></script>
+
+<canvas id="shotCanvas" hidden></canvas>
+
+<script type="module" src="src/main.js"></script>
 </body>
 </html>
